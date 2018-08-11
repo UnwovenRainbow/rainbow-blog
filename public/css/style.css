@@ -1,0 +1,191 @@
+head{
+	margin:5%;
+	
+}
+body{
+	margin-top: 40px;
+	background-color: white;
+}
+h1{
+	font-size: 300%;
+	text-align: center;
+    background: -webkit-linear-gradient(0deg, red, orange, yellow, lime, aqua, blue, purple, fuchsia);
+  -webkit-background-clip: text;
+  -webkit-text-stroke: 4px transparent;
+  color: white;
+  max-width: 550px;
+  padding: 20px;
+  width: 100%;
+  margin: auto;
+}
+[ng-quill-editor] { display: block; }
+
+.navbar-dark .nav-item > .nav-link.active  {
+	color:white;
+}
+.navigation{
+	margin-top: 20px;
+}
+.post{
+
+}
+.post-title{
+
+}
+.post-content{
+
+}
+.post-timestamp{
+
+}
+.editor-title{
+	align-items: baseline;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	display: flex;
+}
+.editor-tags{
+	width: 100%;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+.editor-title input{
+	display: flex;
+	flex: 1 1 auto;
+}
+.editor-title p{
+	display: flex;
+	flex: 0 1 auto;
+}
+.blog-header{
+	padding: 10px;
+	border-top:  3px solid white;
+	border-bottom: 3px solid white;
+	margin-bottom: 30px;
+	text-align: center;
+	border-image: linear-gradient(to right, red, orange, yellow, lime, aqua, blue, purple, fuchsia);
+  border-image-slice: 1;
+  background-color: white;
+}
+#navbar > span {
+	margin-right: 5px;
+	line-height: 1;
+	background-origin: border-box;
+	background-clip: padding-box, border-box;
+	
+}
+#navbar > span:first-child {
+	border: solid 3px transparent;
+	border-radius: 15px;
+	background-image: linear-gradient(white, white), linear-gradient(to right, red,orange);
+	
+}
+#navbar > span:nth-child(2) {
+	
+	border: solid 3px transparent;
+	border-radius: 15px;
+	background-image: linear-gradient(white, white), linear-gradient(to right, orange,yellow);
+	
+}
+#navbar > span:nth-child(3) {
+	
+	border: solid 3px transparent;
+	border-radius: 15px;
+	background-image: linear-gradient(white, white), linear-gradient(to right, yellow,lime);
+	
+}
+#navbar > span:nth-child(4) {
+	
+	border: solid 3px transparent;
+	border-radius: 15px;
+	background-image: linear-gradient(white, white), linear-gradient(to right, lime,aqua);
+	
+}
+#navbar > span:nth-child(5) {
+	
+	border: solid 3px transparent;
+	border-radius: 15px;
+	background-image: linear-gradient(white, white), linear-gradient(to right, aqua,blue);
+	
+}
+#navbar > span:nth-child(6) {
+	
+	border: solid 3px transparent;
+	border-radius: 15px;
+	background-image: linear-gradient(white, white), linear-gradient(to right, blue,purple);
+}	
+#navbar > span:nth-child(7) {
+	
+	border: solid 3px transparent;
+	border-radius: 15px;
+	background-image: linear-gradient(white, white), linear-gradient(to right, purple,fuchsia);
+	}
+#navbar {
+	padding: 5px;
+	border-top: 2px solid transparent;
+	border-bottom: 2px solid transparent;
+  border-image: linear-gradient(to right, red, orange, yellow, lime, aqua, blue, purple, fuchsia);
+  border-image-slice: 1;
+  background-color: white;
+	display: flex;
+}
+.hoverable {
+	display: inline-block;
+	text-align: center;
+	vertical-align: middle;
+	background-color: darkgray;
+	padding: 10px;
+
+        /* Default font size is 16px, you can find this in chrome by inspecting a hoverable element, first uncheck the font-size in .hoverable, then in styles under the coloured margin, border, padding rectangles, type in the filter: font-size, see what it gives as a default size
+
+        The max-width, max-height, width and height should correspond to this font-size. */
+        font-size: 24px;
+        max-width: 50px;
+        max-height: 50px;
+        overflow: hidden;
+        white-space: nowrap;
+        transition: all 1s;
+    }
+    .hoverable:hover {
+        /* The easiest is to make this the width of the largest .hoverable (when expanded), if you make this too big, the transition will not look very nice. In the case that you have some text that is very big, you might want to separate into multiple classes (like .hoverable-big) and give that one in specific with :hover a greater max-width
+        Basically just try to keep them as low as possible */
+        max-width: 150px;
+        transition: all 1s;
+    }
+    .hoverable div {
+    	width: 24px;
+    	height: 24px;
+    	display: inline-block;
+    	text-align: center;
+    	vertical-align: baseline;
+    	
+    }
+    .hoverable i {
+    	display: inline-flex;
+    	justify-content: center;
+    	align-items: center;
+    	
+    }
+    .hoverable span {
+    	padding-left: 5px;
+    	display: inline-block;
+    	text-align: center;
+    }
+.quill-editor {
+	margin-left: 5%;
+	margin-right: 5%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,5 +1,5 @@
 const { Pool } = require('pg')
-const credentials = require('credentials.json')
+const credentials = require('./credentials.json')
 
 const pool = new Pool(credentials)
 

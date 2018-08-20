@@ -32,5 +32,19 @@ blogje.controller('quillCtrl', ['$scope', '$http', function($scope, $http) {
     };
     $scope.preview = function() {
         console.log('previewed muhahaha');
-    }
+    };
+}]);
+
+blogje.controller('loginCtrl', ['$scope', '$http', '$location', function($scope, $http, $location) {
+    $scope.loginStatus = undefined;
+    $scope.dataLoading = false;
+
+    $scope.login = function() {
+        $scope.dataLoading = true;
+        $http.post('/auth/login', {username: $scope.username, password: $scope.password}).then(function(response) {
+            $scope.loginStatus = response.data;
+            $scope.dataLoading = false;
+            $location.path('/index');
+        });
+    };
 }]);

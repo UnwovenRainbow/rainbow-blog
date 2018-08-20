@@ -17,6 +17,9 @@ blogje.config(function($routeProvider) {
         .when('/blog', {
             templateUrl: '/views/blog.html'
         })
+        .when('/login', {
+            templateUrl: '/views/login.html'
+        })
         .otherwise({
             redirectTo: '/'
         });

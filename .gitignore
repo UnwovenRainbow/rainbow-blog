@@ -1,6 +1,8 @@
 # Custom
 *.bat
 db/credentials.json
+config.json
+sessions
 
 # Created by https://www.gitignore.io/api/node,sublimetext
 

@@ -18,27 +18,64 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   const { id } = req.params
-  const { rows } = await db.query('SELECT * FROM public."Post" WHERE id = $1', [id])
+  const { rows } = await db.query('SELECT * FROM public."Post" WHERE post_id = $1', [id])
   res.json(rows[0])
 })
 
 router.post('/', async (req, res) => {
-	if (!req.body || !req.body.title || !req.body.content) {
-    let message = undefined
-    if (!req.body) {
-      message = 'Invalid JSON'
-    } else if (req.body.title === undefined) {
-      message = 'Missing title'
-    } else if (req.body.title === '') {
-      message = 'Empty title'
-    } else if (req.body.content === undefined) {
-      message = 'Missing content'
-    } else if (!req.body.content) {
-      message = 'Empty content'
-    }
+  let message = undefined
+  if (!req.body) {
+    message = 'Invalid JSON'
+  } else if (req.body.title === undefined) {
+    message = 'Missing title'
+  } else if (req.body.title === '') {
+    message = 'Empty title'
+  } else if (req.body.content === undefined) {
+    message = 'Missing content'
+  } else if (!req.body.content) {
+    message = 'Empty content'
+  } else if (!req.user) {
+    message = 'Not logged in'
+  } else if (!req.user.role || req.user.role !== 'administrator') {
+    message = 'No permission'
+  }
 
+  if (message !== undefined) {
     return res.status(400).json({error: {message: message}})
   }
+
   const { response } = await db.query('INSERT INTO public."Post"(title, content) VALUES($1, $2) RETURNING *', [req.body.title, req.body.content])
   res.json(response)
+})
+
+router.get('/:id/comment', async (req, res) => {
+  const { id } = req.params
+  const { rows } = await db.query('SELECT * FROM public."Post" INNER JOIN public."Comment" USING (post_id) WHERE post_id = $1', [id])
+  res.json(rows[0])
+})
+
+router.post('/:id/comment', async (req, res) => {
+  const { id } = req.params
+
+  let message = undefined
+  if (!req.body) {
+    message = 'Invalid JSON'
+  } else if (req.body.text === undefined) {
+    message = 'Missing comment'
+  } else if (req.body.text === '') {
+    message = 'Empty comment'
+  } else if (!req.user) {
+    message = 'Not logged in'
+  }
+
+  if (message !== undefined) {
+    return res.status(400).json({error: {message: message}})
+  }
+
+  try {
+    const { response } = await db.query('INSERT INTO public."Comment"(text, user_id, post_id) VALUES($1, $2, $3) RETURNING *', [req.body.text, req.user.user_id, id])
+    res.json(response)
+  } catch (err) {
+    res.status(400).json({error: {message: err.message}})
+  }
 })

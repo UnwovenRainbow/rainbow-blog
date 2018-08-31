@@ -21,9 +21,9 @@ function tableExistsQuery(table_schema, table_name) {
 
 createPostTableQuery =  `CREATE TABLE public."Post" (
                           post_id SERIAL,
-                          "timestamp" timestamp with time zone NOT NULL DEFAULT now(),
-                          title character varying(100) COLLATE pg_catalog."default" NOT NULL,
-                          content text COLLATE pg_catalog."default" NOT NULL,
+                          timestamp timestamp with time zone NOT NULL DEFAULT now(),
+                          title character varying(100) NOT NULL,
+                          content text NOT NULL,
                           CONSTRAINT post_id PRIMARY KEY (post_id)
                         )
                         WITH (
@@ -33,10 +33,11 @@ createPostTableQuery =  `CREATE TABLE public."Post" (
 
 createUserTableQuery =  `CREATE TABLE public."User" (
                           user_id SERIAL,
-                          username character varying(100) COLLATE pg_catalog."default" NOT NULL UNIQUE,
-                          password text COLLATE pg_catalog."default" NOT NULL,
-                          email character varying(100) COLLATE pg_catalog."default" NOT NULL UNIQUE,
-                          "joined" timestamp with time zone NOT NULL DEFAULT now(),
+                          username character varying(100) NOT NULL UNIQUE,
+                          password text NOT NULL,
+                          email character varying(100) NOT NULL UNIQUE,
+                          joined timestamp with time zone NOT NULL DEFAULT now(),
+                          role character varying(20),
                           CONSTRAINT user_id PRIMARY KEY (user_id)
                         )
                         WITH (
@@ -44,29 +45,57 @@ createUserTableQuery =  `CREATE TABLE public."User" (
                         )
                         TABLESPACE pg_default;`
 
-async function setupPosts(client) {
-  const res = await client.query(tableExistsQuery('public', 'Post'))
-  if (res.rows[0].exists === false) {
-    console.log('Creating table public."Post"')
-    await client.query(createPostTableQuery)
-    await client.query(`ALTER TABLE public."Post" OWNER to postgres;`)
-  }
-}
+createCommentTableQuery =  `CREATE TABLE public."Comment" (
+                          comment_id SERIAL,
+                          timestamp timestamp with time zone NOT NULL DEFAULT now(),
+                          text text NOT NULL,
+                          post_id integer references public."Post"(post_id) NOT NULL,
+                          user_id integer references public."User"(user_id) NOT NULL,
+                          CONSTRAINT comment_id PRIMARY KEY (comment_id)
+                        )
+                        WITH (
+                            OIDS = FALSE
+                        )
+                        TABLESPACE pg_default;`
 
-async function setupUsers(client) {
-  const res = await client.query(tableExistsQuery('public', 'User'))
+createTagTableQuery =  `CREATE TABLE public."Tag" (
+                          tag_id SERIAL,
+                          name varchar(100) NOT NULL,
+                          CONSTRAINT tag_id PRIMARY KEY (tag_id)
+                        )
+                        WITH (
+                            OIDS = FALSE
+                        )
+                        TABLESPACE pg_default;`
+
+createPostTagTableQuery =  `CREATE TABLE public."Post_Tag" (
+                          post_tag_id SERIAL,
+                          post_id integer references public."Post"(post_id) NOT NULL,
+                          tag_id integer references public."Tag"(tag_id) NOT NULL,
+                          CONSTRAINT post_tag_id PRIMARY KEY (post_tag_id)
+                        )
+                        WITH (
+                            OIDS = FALSE
+                        )
+                        TABLESPACE pg_default;`
+
+async function setupTable(client, tableName, createTableFunction) {
+  const res = await client.query(tableExistsQuery('public', tableName))
   if (res.rows[0].exists === false) {
-    console.log('Creating table public."User"')
-    await client.query(createUserTableQuery)
-    await client.query(`ALTER TABLE public."User" OWNER to postgres;`)
+    console.log(`Creating table public."${tableName}"`)
+    await client.query(createTableFunction)
+    await client.query(`ALTER TABLE public."${tableName}" OWNER to postgres;`)
   }
 }
 
 (async () => {
   const client = await pool.connect()
   try {
-    await setupPosts(client)
-    await setupUsers(client)
+    await setupTable(client, 'Post', createPostTableQuery)
+    await setupTable(client, 'User', createUserTableQuery)
+    await setupTable(client, 'Comment', createCommentTableQuery)
+    await setupTable(client, 'Tag', createTagTableQuery)
+    await setupTable(client, 'Post_Tag', createPostTagTableQuery)
   } finally {
     client.release()
   }

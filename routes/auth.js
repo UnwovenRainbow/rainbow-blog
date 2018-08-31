@@ -26,6 +26,7 @@ router.post('/login', passport.authenticate('local'), (req, res) => {
     res.json({success: true})
 })
 
+// update public."User" set role = 'administrator' where username = 'xxx';
 router.post('/register', async (req, res) => {
     if (!req.body || !req.body.username || !req.body.password || !req.body.email) {
         return res.status(400).json({success: false})
